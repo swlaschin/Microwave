@@ -8,30 +8,34 @@ namespace Microwave.Web.Controllers
     {
         public IActionResult Index()
         {
-            ViewData["State"] = "to do";
+            var state = Microwave.Api.GetState();
+            ViewData["State"] = Microwave.Api.StateToString(state);
+            ViewData["ErrorMessage"] = "";
             return View("Index");
         }
 
         public IActionResult Start(int howLong)
         {
-            ViewData["State"] = "to do";
-            ViewData["ErrorMessage"] = "to do";
-
+            var result = Microwave.Api.Start(howLong);
+            ViewData["State"] = Microwave.Api.StateToString(result.State);
+            ViewData["ErrorMessage"] = result.Error;
             return View("Index");
         }
 
 
         public IActionResult Open()
         {
-            ViewData["State"] = "to do";
-            ViewData["ErrorMessage"] = "to do";
+            var result = Microwave.Api.Open();
+            ViewData["State"] = Microwave.Api.StateToString(result.State);
+            ViewData["ErrorMessage"] = result.Error;
             return View("Index");
         }
 
         public IActionResult Close()
         {
-            ViewData["State"] = "to do";
-            ViewData["ErrorMessage"] = "to do";
+            var result = Microwave.Api.Close();
+            ViewData["State"] = Microwave.Api.StateToString(result.State);
+            ViewData["ErrorMessage"] = result.Error;
             return View("Index");
         }
 
