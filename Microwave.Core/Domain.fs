@@ -62,6 +62,7 @@ Commands to operate the microwave
         | Open of OpenCommand
         | Close of CloseCommand
         | Start of StartCommand
+        | Stop of StopCommand
 
     // information associated with the Open command
     type OpenCommand = {
@@ -77,6 +78,11 @@ Commands to operate the microwave
     type StartCommand = {
         User : UserId
         HowLong : TimeRemaining
+        }
+
+    // information associated with the Stop command
+    type StopCommand = {
+        User : UserId
         }
 
 (**
@@ -133,6 +139,11 @@ E.g. opening a door, starting it, etc.
     type CloseWhenRunning =
         CloseCommand -> DoorOpenPausedState -> RunningState
 
+    type StopWhenRunning =
+        StopCommand -> RunningState -> DoorClosedIdleState
+
+    type StopWhenPaused =
+        StopCommand -> DoorOpenPausedState -> DoorClosedIdleState
 
 (**
 ## Errors
@@ -145,4 +156,5 @@ A list of all possible errors that can happen
         | CantCloseDoorWhenDoorIsAlreadyClosed
         | CantOpenDoorWhenDoorIsAlreadyOpen
         | CantStart
+        | CantStopWhenIdle
         | NoError

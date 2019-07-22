@@ -1,7 +1,7 @@
 ﻿<h1>Microwave</h1>
 
 <form asp-controller="Microwave" asp-action="Start" method="post">
-    <input type="number" name="HowLong" >
+    <input type="number" name="HowLong">
     <button>Start</button>
 </form>
 
@@ -10,6 +10,9 @@
 </form>
 <form asp-controller="Microwave" asp-action="Close" method="post">
     <button>Close</button>
+</form>
+<form asp-controller="Microwave" asp-action="Stop" method="post">
+    <button>Stop</button>
 </form>
 <form asp-controller="Microwave" asp-action="Index" method="get">
     <button>Get State</button>

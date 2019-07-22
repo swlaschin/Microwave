@@ -17,6 +17,49 @@ module Database =
         state <- newState
 
 
+module Timer =
+    open Domain
+
+    let timer = new System.Timers.Timer(interval=1000.0)
+
+    /// Decrement the time remaining by one second.
+    /// Return a new TimeRemaining, or None
+    let decrementTimeRemaining timeRemaining =
+        let t = TimeRemaining.value timeRemaining
+        TimeRemaining.create (t - 1<second>)
+
+    /// Handle a tick event when Running by decrementing the TimeRemaining
+    /// * if still valid, create a new Running state and save to the database
+    /// * if not valid, set the state to DoorClosedIdle
+    let handleTick() =
+        let currentState = Database.loadState()
+        match currentState with
+        | Running info ->
+            let newTimeRemainingOpt = decrementTimeRemaining info.TimeRemaining
+            let newState =
+                match newTimeRemainingOpt with
+                | None ->
+                    timer.Stop()  // stop the timer when leaving the Running state
+                    // Go to the idle state
+                    DoorClosedIdle DoorClosedIdleState
+                | Some newTimeRemaining ->
+                    // Go to a new Running state, with one second less
+                    Running {info with TimeRemaining=newTimeRemaining}
+            Database.saveState newState
+        | _ ->
+            // in all other cases, do nothing
+            ()
+
+    // add an event handler and make it run in the background (async)
+    timer.Elapsed.Add (fun _ -> async {handleTick()} |> Async.Start )
+
+    /// Start the timer
+    let start() = timer.Start()
+
+    /// Stop the timer
+    let stop() = timer.Stop()
+
+
 module Api =
     open Domain
 
@@ -51,6 +94,7 @@ module Api =
             let errMsg = CantOpenDoorWhenDoorIsAlreadyOpen
             {State = currentState; Error = errMsg }
         | Running stateInfo ->
+            Timer.stop()  // stop the timer when leaving the Running state
             let newStateInfo = Implementation.openWhenRunning cmd stateInfo
             let newState = DoorOpenPaused newStateInfo
             Database.saveState newState
@@ -75,6 +119,7 @@ module Api =
             let newStateInfo = Implementation.closeWhenPaused cmd stateInfo
             let newState = Running newStateInfo
             Database.saveState newState
+            Timer.start()  // start the timer when transitioning to the Running state
             {State = newState; Error = NoError}
 
     let Start(howLong) =
@@ -91,6 +136,7 @@ module Api =
                 let newStateInfo = Implementation.start cmd stateInfo
                 let newState = Running newStateInfo
                 Database.saveState newState
+                Timer.start()  // start the timer when transitioning to the Running state
                 {State = newState; Error = NoError}
             // we can match all the unhandled states together, like this
             | DoorOpenIdle _
@@ -99,14 +145,45 @@ module Api =
                 let errMsg = CantStart
                 {State = currentState; Error = errMsg }
 
+    let Stop() =
+        let currentState = Database.loadState()
+        let cmd : StopCommand = {User = "Scott"}
+
+        // internal helper function to handle logic common to multiple branches
+        let changeState newStateInfo =
+            let newState = DoorClosedIdle newStateInfo
+            Database.saveState newState
+            Timer.stop()  // stop the timer when leaving the Running state
+            {State = newState; Error = NoError}
+
+        match currentState with
+        | Running stateInfo ->
+            let newStateInfo = Implementation.stopWhenRunning cmd stateInfo
+            changeState newStateInfo
+        | DoorOpenPaused stateInfo ->
+            let newStateInfo = Implementation.stopWhenPaused cmd stateInfo
+            changeState newStateInfo
+        // we can match all the unhandled states together, like this
+        | DoorOpenIdle _
+        | DoorClosedIdle _ ->
+            let errMsg = CantStopWhenIdle
+            {State = currentState; Error = errMsg }
+
     let GetState() =
         let currentState = Database.loadState()
         currentState
 
     /// Convert the state into a string for display in the UI
     let StateToString(state) =
-        // a simple and crude implementation
-        sprintf "%A" state
+        match state with
+        | DoorOpenIdle _ ->
+            "Door open and idle"
+        | DoorClosedIdle _ ->
+            "Door closed and idle"
+        | Running info ->
+            sprintf "Running with %i seconds left" (TimeRemaining.value info.TimeRemaining)
+        | DoorOpenPaused info ->
+            sprintf "Paused with %i seconds left" (TimeRemaining.value info.TimeRemaining)
 
     /// Convert the error into a string for display in the UI
     let ErrorToString(lang, error) =
@@ -124,4 +201,8 @@ module Api =
         | CantOpenDoorWhenDoorIsAlreadyOpen ->
             "Can't Open Door When Door Is Already Open"
         | CantStart ->
-            "Can't Start"
+            "Can't start"
+        | CantStopWhenIdle ->
+            "Can't stop when idle"
+
+

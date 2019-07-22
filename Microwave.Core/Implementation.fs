@@ -37,3 +37,14 @@ module Implementation =
                 {TimeRemaining = currentState.TimeRemaining }
             newStateInfo
 
+    let stopWhenRunning : StopWhenRunning =
+        fun cmd currentState ->
+            printfn "Stopped by %s " cmd.User
+            let newStateInfo = DoorClosedIdleState
+            newStateInfo
+
+    let stopWhenPaused : StopWhenPaused =
+        fun cmd currentState ->
+            printfn "Stopped by %s " cmd.User
+            let newStateInfo = DoorClosedIdleState
+            newStateInfo
