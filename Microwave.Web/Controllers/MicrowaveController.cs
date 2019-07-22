@@ -35,15 +35,6 @@ namespace Microwave.Web.Controllers
             return View("Index");
         }
 
-        //public IActionResult Close()
-        //{
-        //    var result = Microwave.Api.Close();
-        //    ViewData["State"] = Microwave.Api.stateToString(result.State);
-        //    ViewData["ErrorMessage"] = Microwave.Api.translateError("en", result.Error);
-        //    return View("Index");
-        //}
-
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
