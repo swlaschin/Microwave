@@ -38,7 +38,19 @@ Common types used throughout the domain
     // (a) `int` is not a word in the domain and
     // (b) it will have constraints (e.g. must be > 0)
 
-    type TimeRemaining = TimeRemaining of int<second>
+    type TimeRemaining = private TimeRemaining of int<second>  // NEW: the constructor is now private
+
+    module TimeRemaining =
+
+        /// Construct a TimeRemaining, or return None
+        let create t =
+            if t > 0<second> then
+                Some (TimeRemaining t)
+            else
+                None
+
+        /// Extract the value from inside a TimeRemaining
+        let value (TimeRemaining t) = t
 
 (**
 ## Commands
@@ -122,4 +134,15 @@ E.g. opening a door, starting it, etc.
         CloseCommand -> DoorOpenPausedState -> RunningState
 
 
+(**
+## Errors
 
+A list of all possible errors that can happen
+*)
+
+    type Error =
+        | CantUseNegativeTimeRemaining
+        | CantCloseDoorWhenDoorIsAlreadyClosed
+        | CantOpenDoorWhenDoorIsAlreadyOpen
+        | CantStart
+        | NoError

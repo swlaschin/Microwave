@@ -26,7 +26,7 @@ module Api =
 
     type ApiResult = {
         State : State
-        Error : string
+        Error : Error
         }
 
     let Open() =
@@ -42,19 +42,19 @@ module Api =
             let newState = DoorOpenIdle newStateInfo
             Database.saveState newState
             // return the new state and a blank error message
-            {State = newState; Error = ""}
+            {State = newState; Error = NoError}
         | DoorOpenIdle stateInfo ->
-            let errMsg = "Can't open door when door is already open"
+            let errMsg = CantOpenDoorWhenDoorIsAlreadyOpen
             // return the original state and an error message
             {State = currentState; Error = errMsg }
         | DoorOpenPaused stateInfo ->
-            let errMsg = "Can't open door when door is already open"
+            let errMsg = CantOpenDoorWhenDoorIsAlreadyOpen
             {State = currentState; Error = errMsg }
         | Running stateInfo ->
             let newStateInfo = Implementation.openWhenRunning cmd stateInfo
             let newState = DoorOpenPaused newStateInfo
             Database.saveState newState
-            {State = newState; Error = ""}
+            {State = newState; Error = NoError}
 
     let Close() =
         let currentState = Database.loadState()
@@ -64,35 +64,40 @@ module Api =
             let newStateInfo = Implementation.closeWhenIdle cmd stateInfo
             let newState = DoorClosedIdle newStateInfo
             Database.saveState newState
-            {State = newState; Error = ""}
+            {State = newState; Error = NoError}
         | DoorClosedIdle stateInfo ->
-            let errMsg = "Can't close door when door is already closed"
+            let errMsg = CantCloseDoorWhenDoorIsAlreadyClosed
             {State = currentState; Error = errMsg }
         | Running stateInfo ->
-            let errMsg = "Can't close door when door is already closed"
+            let errMsg = CantCloseDoorWhenDoorIsAlreadyClosed
             {State = currentState; Error = errMsg }
         | DoorOpenPaused stateInfo ->
             let newStateInfo = Implementation.closeWhenPaused cmd stateInfo
             let newState = Running newStateInfo
             Database.saveState newState
-            {State = newState; Error = ""}
+            {State = newState; Error = NoError}
 
     let Start(howLong) =
         let currentState = Database.loadState()
-        let timeRemaining = TimeRemaining howLong  // create a TimeRemaining value from the parameter passed in.
-        let cmd : StartCommand = {User = "Scott"; HowLong = timeRemaining }
-        match currentState with
-        | DoorClosedIdle stateInfo ->
-            let newStateInfo = Implementation.start cmd stateInfo
-            let newState = Running newStateInfo
-            Database.saveState newState
-            {State = newState; Error = ""}
-        // we can match all the unhandled states together, like this
-        | DoorOpenIdle _
-        | DoorOpenPaused _
-        | Running _ ->
-            let errMsg = "Can't start"
+        let timeRemainingOpt = TimeRemaining.create howLong  // create a TimeRemaining value from the parameter passed in.
+        match timeRemainingOpt with
+        | None ->
+            let errMsg = CantUseNegativeTimeRemaining
             {State = currentState; Error = errMsg }
+        | Some timeRemaining ->
+            let cmd : StartCommand = {User = "Scott"; HowLong = timeRemaining }
+            match currentState with
+            | DoorClosedIdle stateInfo ->
+                let newStateInfo = Implementation.start cmd stateInfo
+                let newState = Running newStateInfo
+                Database.saveState newState
+                {State = newState; Error = NoError}
+            // we can match all the unhandled states together, like this
+            | DoorOpenIdle _
+            | DoorOpenPaused _
+            | Running _ ->
+                let errMsg = CantStart
+                {State = currentState; Error = errMsg }
 
     let GetState() =
         let currentState = Database.loadState()
@@ -102,3 +107,21 @@ module Api =
     let StateToString(state) =
         // a simple and crude implementation
         sprintf "%A" state
+
+    /// Convert the error into a string for display in the UI
+    let ErrorToString(lang, error) =
+        match error with
+        | NoError ->
+            ""
+        | CantUseNegativeTimeRemaining ->
+            "Can't Use Negative Time"
+        | CantCloseDoorWhenDoorIsAlreadyClosed ->
+            match lang with
+            | "fr-FR" ->
+                "Impossible de fermer la porte quand la porte est déjà fermée"
+            | _ ->
+                "Can't Close Door When Door Is Already Closed"
+        | CantOpenDoorWhenDoorIsAlreadyOpen ->
+            "Can't Open Door When Door Is Already Open"
+        | CantStart ->
+            "Can't Start"

@@ -18,7 +18,7 @@ namespace Microwave.Web.Controllers
         {
             var result = Microwave.Api.Start(howLong);
             ViewData["State"] = Microwave.Api.StateToString(result.State);
-            ViewData["ErrorMessage"] = result.Error;
+            ViewData["ErrorMessage"] = Microwave.Api.ErrorToString("en-GB",result.Error);
             return View("Index");
         }
 
@@ -27,7 +27,7 @@ namespace Microwave.Web.Controllers
         {
             var result = Microwave.Api.Open();
             ViewData["State"] = Microwave.Api.StateToString(result.State);
-            ViewData["ErrorMessage"] = result.Error;
+            ViewData["ErrorMessage"] = Microwave.Api.ErrorToString("en-GB", result.Error);
             return View("Index");
         }
 
@@ -35,10 +35,9 @@ namespace Microwave.Web.Controllers
         {
             var result = Microwave.Api.Close();
             ViewData["State"] = Microwave.Api.StateToString(result.State);
-            ViewData["ErrorMessage"] = result.Error;
+            ViewData["ErrorMessage"] = Microwave.Api.ErrorToString("en-GB", result.Error);
             return View("Index");
         }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

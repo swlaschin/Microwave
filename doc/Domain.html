@@ -396,7 +396,7 @@
 <h2>Common</h2>
 <p>Common types used throughout the domain</p>
 <pre class="fssnip highlighted"><code lang="fsharp">    <span class="c">/// A placeholder until we know more</span>
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="rt">UserId</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="rt">string</span>
+    <span class="k">type</span> <span class="rt">UserId</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="rt">string</span>
 
     <span class="c">// We create unit of measures to</span>
     <span class="c">// (a) help with documentation and</span>
@@ -404,38 +404,50 @@
 
     <span class="c">// NOTE: All the SI Units are available in F# in the FSharp.Data.UnitSystems.SI namespace</span>
 
-    <span class="k">type</span> <span class="pn">[&lt;</span><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="rt">Measure</span><span class="pn">&gt;]</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="rt">second</span>
-    <span class="k">type</span> <span class="pn">[&lt;</span><span onmouseout="hideTip(event, 'fs4', 6)" onmouseover="showTip(event, 'fs4', 6)" class="rt">Measure</span><span class="pn">&gt;]</span> <span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="rt">millisecond</span>
+    <span class="k">type</span> <span class="pn">[&lt;</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="rt">Measure</span><span class="pn">&gt;]</span> <span class="rt">second</span>
+    <span class="k">type</span> <span class="pn">[&lt;</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="rt">Measure</span><span class="pn">&gt;]</span> <span class="rt">millisecond</span>
 
 
     <span class="c">// We create a special `TimeRemaining` type rather than using a simple `int` because</span>
     <span class="c">// (a) `int` is not a word in the domain and</span>
     <span class="c">// (b) it will have constraints (e.g. must be &gt; 0)</span>
 
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="rt">TimeRemaining</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="uc">TimeRemaining</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="vt">int</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs5', 11)" onmouseover="showTip(event, 'fs5', 11)" class="rt">second</span><span class="pn">&gt;</span>
+    <span class="k">type</span> <span class="rt">TimeRemaining</span> <span class="o">=</span> <span class="k">private</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="uc">TimeRemaining</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="vt">int</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="rt">second</span><span class="pn">&gt;</span>  <span class="c">// NEW: the constructor is now private</span>
+
+    <span class="k">module</span> <span onmouseout="hideTip(event, 'fs3', 7)" onmouseover="showTip(event, 'fs3', 7)" class="m">TimeRemaining</span> <span class="o">=</span>
+
+        <span class="c">/// Construct a TimeRemaining, or return None</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="fn">create</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="id">t</span> <span class="o">=</span>
+            <span class="k">if</span> <span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="id">t</span> <span class="o">&gt;</span> <span class="n">0</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs5', 11)" onmouseover="showTip(event, 'fs5', 11)" class="rt">second</span><span class="pn">&gt;</span> <span class="k">then</span>
+                <span onmouseout="hideTip(event, 'fs8', 12)" onmouseover="showTip(event, 'fs8', 12)" class="uc">Some</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs3', 13)" onmouseover="showTip(event, 'fs3', 13)" class="uc">TimeRemaining</span> <span onmouseout="hideTip(event, 'fs7', 14)" onmouseover="showTip(event, 'fs7', 14)" class="id">t</span><span class="pn">)</span>
+            <span class="k">else</span>
+                <span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="uc">None</span>
+
+        <span class="c">/// Extract the value from inside a TimeRemaining</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs10', 16)" onmouseover="showTip(event, 'fs10', 16)" class="fn">value</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs3', 17)" onmouseover="showTip(event, 'fs3', 17)" class="uc">TimeRemaining</span> <span onmouseout="hideTip(event, 'fs7', 18)" onmouseover="showTip(event, 'fs7', 18)" class="id">t</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 19)" onmouseover="showTip(event, 'fs7', 19)" class="id">t</span>
 </code></pre>
 <h2>Commands</h2>
 <p>Commands to operate the microwave</p>
 <pre class="fssnip highlighted"><code lang="fsharp">    <span class="c">/// the complete list of commands</span>
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="rt">Command</span> <span class="o">=</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="uc">Open</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="rt">OpenCommand</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs12', 15)" onmouseover="showTip(event, 'fs12', 15)" class="uc">Close</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs13', 16)" onmouseover="showTip(event, 'fs13', 16)" class="rt">CloseCommand</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs14', 17)" onmouseover="showTip(event, 'fs14', 17)" class="uc">Start</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs15', 18)" onmouseover="showTip(event, 'fs15', 18)" class="rt">StartCommand</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs11', 20)" onmouseover="showTip(event, 'fs11', 20)" class="rt">Command</span> <span class="o">=</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs12', 21)" onmouseover="showTip(event, 'fs12', 21)" class="uc">Open</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs13', 22)" onmouseover="showTip(event, 'fs13', 22)" class="rt">OpenCommand</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs14', 23)" onmouseover="showTip(event, 'fs14', 23)" class="uc">Close</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs15', 24)" onmouseover="showTip(event, 'fs15', 24)" class="rt">CloseCommand</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs16', 25)" onmouseover="showTip(event, 'fs16', 25)" class="uc">Start</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs17', 26)" onmouseover="showTip(event, 'fs17', 26)" class="rt">StartCommand</span>
 
     <span class="c">// information associated with the Open command</span>
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs11', 19)" onmouseover="showTip(event, 'fs11', 19)" class="rt">OpenCommand</span> <span class="o">=</span> <span class="pn">{</span>
-        <span onmouseout="hideTip(event, 'fs16', 20)" onmouseover="showTip(event, 'fs16', 20)" class="id">User</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs2', 21)" onmouseover="showTip(event, 'fs2', 21)" class="rt">UserId</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs13', 27)" onmouseover="showTip(event, 'fs13', 27)" class="rt">OpenCommand</span> <span class="o">=</span> <span class="pn">{</span>
+        <span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="id">User</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs19', 29)" onmouseover="showTip(event, 'fs19', 29)" class="rt">UserId</span>
         <span class="pn">}</span>
 
     <span class="c">// information associated with the Close command</span>
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs13', 22)" onmouseover="showTip(event, 'fs13', 22)" class="rt">CloseCommand</span> <span class="o">=</span> <span class="pn">{</span>
-        <span onmouseout="hideTip(event, 'fs17', 23)" onmouseover="showTip(event, 'fs17', 23)" class="id">User</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs2', 24)" onmouseover="showTip(event, 'fs2', 24)" class="rt">UserId</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs15', 30)" onmouseover="showTip(event, 'fs15', 30)" class="rt">CloseCommand</span> <span class="o">=</span> <span class="pn">{</span>
+        <span onmouseout="hideTip(event, 'fs20', 31)" onmouseover="showTip(event, 'fs20', 31)" class="id">User</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs19', 32)" onmouseover="showTip(event, 'fs19', 32)" class="rt">UserId</span>
         <span class="pn">}</span>
 
     <span class="c">// information associated with the Start command</span>
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs15', 25)" onmouseover="showTip(event, 'fs15', 25)" class="rt">StartCommand</span> <span class="o">=</span> <span class="pn">{</span>
-        <span onmouseout="hideTip(event, 'fs18', 26)" onmouseover="showTip(event, 'fs18', 26)" class="id">User</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs2', 27)" onmouseover="showTip(event, 'fs2', 27)" class="rt">UserId</span>
-        <span onmouseout="hideTip(event, 'fs19', 28)" onmouseover="showTip(event, 'fs19', 28)" class="id">HowLong</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs7', 29)" onmouseover="showTip(event, 'fs7', 29)" class="rt">TimeRemaining</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs17', 33)" onmouseover="showTip(event, 'fs17', 33)" class="rt">StartCommand</span> <span class="o">=</span> <span class="pn">{</span>
+        <span onmouseout="hideTip(event, 'fs21', 34)" onmouseover="showTip(event, 'fs21', 34)" class="id">User</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs19', 35)" onmouseover="showTip(event, 'fs19', 35)" class="rt">UserId</span>
+        <span onmouseout="hideTip(event, 'fs22', 36)" onmouseover="showTip(event, 'fs22', 36)" class="id">HowLong</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs23', 37)" onmouseover="showTip(event, 'fs23', 37)" class="rt">TimeRemaining</span>
         <span class="pn">}</span>
 </code></pre>
 <h2>States</h2>
@@ -445,79 +457,101 @@
 <li>The microwave cannot be running if the door is open</li>
 <li>The microwave cannot be running if the TimeRemaining = 0</li>
 </ul>
-<pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs20', 30)" onmouseover="showTip(event, 'fs20', 30)" class="rt">State</span> <span class="o">=</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs21', 31)" onmouseover="showTip(event, 'fs21', 31)" class="uc">DoorOpenIdle</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs22', 32)" onmouseover="showTip(event, 'fs22', 32)" class="rt">DoorOpenIdleState</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs23', 33)" onmouseover="showTip(event, 'fs23', 33)" class="uc">DoorClosedIdle</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs24', 34)" onmouseover="showTip(event, 'fs24', 34)" class="rt">DoorClosedIdleState</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs25', 35)" onmouseover="showTip(event, 'fs25', 35)" class="uc">Running</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs26', 36)" onmouseover="showTip(event, 'fs26', 36)" class="rt">RunningState</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs27', 37)" onmouseover="showTip(event, 'fs27', 37)" class="uc">DoorOpenPaused</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs28', 38)" onmouseover="showTip(event, 'fs28', 38)" class="rt">DoorOpenPausedState</span>
+<pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs24', 38)" onmouseover="showTip(event, 'fs24', 38)" class="rt">State</span> <span class="o">=</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs25', 39)" onmouseover="showTip(event, 'fs25', 39)" class="uc">DoorOpenIdle</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs26', 40)" onmouseover="showTip(event, 'fs26', 40)" class="rt">DoorOpenIdleState</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs27', 41)" onmouseover="showTip(event, 'fs27', 41)" class="uc">DoorClosedIdle</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs28', 42)" onmouseover="showTip(event, 'fs28', 42)" class="rt">DoorClosedIdleState</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs29', 43)" onmouseover="showTip(event, 'fs29', 43)" class="uc">Running</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs30', 44)" onmouseover="showTip(event, 'fs30', 44)" class="rt">RunningState</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs31', 45)" onmouseover="showTip(event, 'fs31', 45)" class="uc">DoorOpenPaused</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs32', 46)" onmouseover="showTip(event, 'fs32', 46)" class="rt">DoorOpenPausedState</span>
 
     <span class="c">/// A place holder for state associated with the door being open.</span>
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs22', 39)" onmouseover="showTip(event, 'fs22', 39)" class="rt">DoorOpenIdleState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs22', 40)" onmouseover="showTip(event, 'fs22', 40)" class="uc">DoorOpenIdleState</span>
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs24', 41)" onmouseover="showTip(event, 'fs24', 41)" class="rt">DoorClosedIdleState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs24', 42)" onmouseover="showTip(event, 'fs24', 42)" class="uc">DoorClosedIdleState</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs26', 47)" onmouseover="showTip(event, 'fs26', 47)" class="rt">DoorOpenIdleState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs33', 48)" onmouseover="showTip(event, 'fs33', 48)" class="uc">DoorOpenIdleState</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs28', 49)" onmouseover="showTip(event, 'fs28', 49)" class="rt">DoorClosedIdleState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs34', 50)" onmouseover="showTip(event, 'fs34', 50)" class="uc">DoorClosedIdleState</span>
 
     <span class="c">/// The running state needs to keep track of the time remaining</span>
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs26', 43)" onmouseover="showTip(event, 'fs26', 43)" class="rt">RunningState</span> <span class="o">=</span> <span class="pn">{</span>
-        <span onmouseout="hideTip(event, 'fs29', 44)" onmouseover="showTip(event, 'fs29', 44)" class="id">TimeRemaining</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs7', 45)" onmouseover="showTip(event, 'fs7', 45)" class="rt">TimeRemaining</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs30', 51)" onmouseover="showTip(event, 'fs30', 51)" class="rt">RunningState</span> <span class="o">=</span> <span class="pn">{</span>
+        <span onmouseout="hideTip(event, 'fs35', 52)" onmouseover="showTip(event, 'fs35', 52)" class="id">TimeRemaining</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs35', 53)" onmouseover="showTip(event, 'fs35', 53)" class="rt">TimeRemaining</span>
         <span class="pn">}</span>
 
     <span class="c">/// The paused state also needs to keep track of the time remaining</span>
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs28', 46)" onmouseover="showTip(event, 'fs28', 46)" class="rt">DoorOpenPausedState</span> <span class="o">=</span> <span class="pn">{</span>
-        <span onmouseout="hideTip(event, 'fs30', 47)" onmouseover="showTip(event, 'fs30', 47)" class="id">TimeRemaining</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs7', 48)" onmouseover="showTip(event, 'fs7', 48)" class="rt">TimeRemaining</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs32', 54)" onmouseover="showTip(event, 'fs32', 54)" class="rt">DoorOpenPausedState</span> <span class="o">=</span> <span class="pn">{</span>
+        <span onmouseout="hideTip(event, 'fs36', 55)" onmouseover="showTip(event, 'fs36', 55)" class="id">TimeRemaining</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs36', 56)" onmouseover="showTip(event, 'fs36', 56)" class="rt">TimeRemaining</span>
         <span class="pn">}</span>
 </code></pre>
 <h2>State transitions</h2>
 <p>Here, we document how to go from one state of the microwave to another.
 E.g. opening a door, starting it, etc.</p>
-<pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs31', 49)" onmouseover="showTip(event, 'fs31', 49)" class="rt">OpenWhenIdle</span> <span class="o">=</span>
-        <span onmouseout="hideTip(event, 'fs11', 50)" onmouseover="showTip(event, 'fs11', 50)" class="rt">OpenCommand</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs24', 51)" onmouseover="showTip(event, 'fs24', 51)" class="rt">DoorClosedIdleState</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs22', 52)" onmouseover="showTip(event, 'fs22', 52)" class="rt">DoorOpenIdleState</span>
+<pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs37', 57)" onmouseover="showTip(event, 'fs37', 57)" class="rt">OpenWhenIdle</span> <span class="o">=</span>
+        <span onmouseout="hideTip(event, 'fs13', 58)" onmouseover="showTip(event, 'fs13', 58)" class="rt">OpenCommand</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs28', 59)" onmouseover="showTip(event, 'fs28', 59)" class="rt">DoorClosedIdleState</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs26', 60)" onmouseover="showTip(event, 'fs26', 60)" class="rt">DoorOpenIdleState</span>
 
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs32', 53)" onmouseover="showTip(event, 'fs32', 53)" class="rt">CloseWhenIdle</span> <span class="o">=</span>
-        <span onmouseout="hideTip(event, 'fs13', 54)" onmouseover="showTip(event, 'fs13', 54)" class="rt">CloseCommand</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs22', 55)" onmouseover="showTip(event, 'fs22', 55)" class="rt">DoorOpenIdleState</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs24', 56)" onmouseover="showTip(event, 'fs24', 56)" class="rt">DoorClosedIdleState</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs38', 61)" onmouseover="showTip(event, 'fs38', 61)" class="rt">CloseWhenIdle</span> <span class="o">=</span>
+        <span onmouseout="hideTip(event, 'fs15', 62)" onmouseover="showTip(event, 'fs15', 62)" class="rt">CloseCommand</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs26', 63)" onmouseover="showTip(event, 'fs26', 63)" class="rt">DoorOpenIdleState</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs28', 64)" onmouseover="showTip(event, 'fs28', 64)" class="rt">DoorClosedIdleState</span>
 
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs14', 57)" onmouseover="showTip(event, 'fs14', 57)" class="rt">Start</span> <span class="o">=</span>
-        <span onmouseout="hideTip(event, 'fs15', 58)" onmouseover="showTip(event, 'fs15', 58)" class="rt">StartCommand</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs24', 59)" onmouseover="showTip(event, 'fs24', 59)" class="rt">DoorClosedIdleState</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs26', 60)" onmouseover="showTip(event, 'fs26', 60)" class="rt">RunningState</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs39', 65)" onmouseover="showTip(event, 'fs39', 65)" class="rt">Start</span> <span class="o">=</span>
+        <span onmouseout="hideTip(event, 'fs17', 66)" onmouseover="showTip(event, 'fs17', 66)" class="rt">StartCommand</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs28', 67)" onmouseover="showTip(event, 'fs28', 67)" class="rt">DoorClosedIdleState</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs30', 68)" onmouseover="showTip(event, 'fs30', 68)" class="rt">RunningState</span>
 
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs33', 61)" onmouseover="showTip(event, 'fs33', 61)" class="rt">OpenWhenRunning</span> <span class="o">=</span>
-        <span onmouseout="hideTip(event, 'fs11', 62)" onmouseover="showTip(event, 'fs11', 62)" class="rt">OpenCommand</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs26', 63)" onmouseover="showTip(event, 'fs26', 63)" class="rt">RunningState</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs28', 64)" onmouseover="showTip(event, 'fs28', 64)" class="rt">DoorOpenPausedState</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs40', 69)" onmouseover="showTip(event, 'fs40', 69)" class="rt">OpenWhenRunning</span> <span class="o">=</span>
+        <span onmouseout="hideTip(event, 'fs13', 70)" onmouseover="showTip(event, 'fs13', 70)" class="rt">OpenCommand</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs30', 71)" onmouseover="showTip(event, 'fs30', 71)" class="rt">RunningState</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs32', 72)" onmouseover="showTip(event, 'fs32', 72)" class="rt">DoorOpenPausedState</span>
 
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs34', 65)" onmouseover="showTip(event, 'fs34', 65)" class="rt">CloseWhenRunning</span> <span class="o">=</span>
-        <span onmouseout="hideTip(event, 'fs13', 66)" onmouseover="showTip(event, 'fs13', 66)" class="rt">CloseCommand</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs28', 67)" onmouseover="showTip(event, 'fs28', 67)" class="rt">DoorOpenPausedState</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs26', 68)" onmouseover="showTip(event, 'fs26', 68)" class="rt">RunningState</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs41', 73)" onmouseover="showTip(event, 'fs41', 73)" class="rt">CloseWhenRunning</span> <span class="o">=</span>
+        <span onmouseout="hideTip(event, 'fs15', 74)" onmouseover="showTip(event, 'fs15', 74)" class="rt">CloseCommand</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs32', 75)" onmouseover="showTip(event, 'fs32', 75)" class="rt">DoorOpenPausedState</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs30', 76)" onmouseover="showTip(event, 'fs30', 76)" class="rt">RunningState</span>
+</code></pre>
+<h2>Errors</h2>
+<p>A list of all possible errors that can happen</p>
+<pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs42', 77)" onmouseover="showTip(event, 'fs42', 77)" class="rt">Error</span> <span class="o">=</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs43', 78)" onmouseover="showTip(event, 'fs43', 78)" class="uc">CantUseNegativeTimeRemaining</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs44', 79)" onmouseover="showTip(event, 'fs44', 79)" class="uc">CantCloseDoorWhenDoorIsAlreadyClosed</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs45', 80)" onmouseover="showTip(event, 'fs45', 80)" class="uc">CantOpenDoorWhenDoorIsAlreadyOpen</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs46', 81)" onmouseover="showTip(event, 'fs46', 81)" class="uc">CantStart</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs47', 82)" onmouseover="showTip(event, 'fs47', 82)" class="uc">NoError</span>
 </code></pre>
 
-          <div class="tip" id="fs1">module Domain<br /><br />from Microwave</div>
-<div class="tip" id="fs2">type UserId = string<br /><em><br /><br />&#160;A placeholder until we know more</em></div>
-<div class="tip" id="fs3">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />--------------------<br />type string = System.String</div>
-<div class="tip" id="fs4">Multiple items<br />type MeasureAttribute =<br />&#160;&#160;inherit Attribute<br />&#160;&#160;new : unit -&gt; MeasureAttribute<br /><br />--------------------<br />new : unit -&gt; MeasureAttribute</div>
+          <div class="tip" id="fs1">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />--------------------<br />type string = System.String</div>
+<div class="tip" id="fs2">Multiple items<br />type MeasureAttribute =<br />&#160;&#160;inherit Attribute<br />&#160;&#160;new : unit -&gt; MeasureAttribute<br /><br />--------------------<br />new : unit -&gt; MeasureAttribute</div>
+<div class="tip" id="fs3">Multiple items<br />union case TimeRemaining.TimeRemaining: int&lt;second&gt; -&gt; TimeRemaining<br /><br />--------------------<br />module TimeRemaining<br /><br />from Microwave.Domain<br /><br />--------------------<br />type TimeRemaining = private | TimeRemaining of int&lt;second&gt;</div>
+<div class="tip" id="fs4">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int</div>
 <div class="tip" id="fs5">[&lt;Measure&gt;]<br />type second</div>
-<div class="tip" id="fs6">[&lt;Measure&gt;]<br />type millisecond</div>
-<div class="tip" id="fs7">Multiple items<br />union case TimeRemaining.TimeRemaining: int&lt;second&gt; -&gt; TimeRemaining<br /><br />--------------------<br />type TimeRemaining = | TimeRemaining of int&lt;second&gt;</div>
-<div class="tip" id="fs8">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int</div>
-<div class="tip" id="fs9">type Command =<br />&#160;&#160;| Open of OpenCommand<br />&#160;&#160;| Close of CloseCommand<br />&#160;&#160;| Start of StartCommand<br /><em><br /><br />&#160;the complete list of commands</em></div>
-<div class="tip" id="fs10">union case Command.Open: OpenCommand -&gt; Command</div>
-<div class="tip" id="fs11">type OpenCommand =<br />&#160;&#160;{User: UserId;}</div>
-<div class="tip" id="fs12">union case Command.Close: CloseCommand -&gt; Command</div>
-<div class="tip" id="fs13">type CloseCommand =<br />&#160;&#160;{User: UserId;}</div>
-<div class="tip" id="fs14">Multiple items<br />union case Command.Start: StartCommand -&gt; Command<br /><br />--------------------<br />type Start = StartCommand -&gt; DoorClosedIdleState -&gt; RunningState</div>
-<div class="tip" id="fs15">type StartCommand =<br />&#160;&#160;{User: UserId;<br />&#160;&#160;&#160;HowLong: TimeRemaining;}</div>
-<div class="tip" id="fs16">OpenCommand.User: UserId</div>
-<div class="tip" id="fs17">CloseCommand.User: UserId</div>
-<div class="tip" id="fs18">StartCommand.User: UserId</div>
-<div class="tip" id="fs19">StartCommand.HowLong: TimeRemaining</div>
-<div class="tip" id="fs20">type State =<br />&#160;&#160;| DoorOpenIdle of DoorOpenIdleState<br />&#160;&#160;| DoorClosedIdle of DoorClosedIdleState<br />&#160;&#160;| Running of RunningState<br />&#160;&#160;| DoorOpenPaused of DoorOpenPausedState</div>
-<div class="tip" id="fs21">union case State.DoorOpenIdle: DoorOpenIdleState -&gt; State</div>
-<div class="tip" id="fs22">Multiple items<br />union case DoorOpenIdleState.DoorOpenIdleState: DoorOpenIdleState<br /><br />--------------------<br />type DoorOpenIdleState = | DoorOpenIdleState<br /><em><br /><br />&#160;A place holder for state associated with the door being open.</em></div>
-<div class="tip" id="fs23">union case State.DoorClosedIdle: DoorClosedIdleState -&gt; State</div>
-<div class="tip" id="fs24">Multiple items<br />union case DoorClosedIdleState.DoorClosedIdleState: DoorClosedIdleState<br /><br />--------------------<br />type DoorClosedIdleState = | DoorClosedIdleState</div>
-<div class="tip" id="fs25">union case State.Running: RunningState -&gt; State</div>
-<div class="tip" id="fs26">type RunningState =<br />&#160;&#160;{TimeRemaining: TimeRemaining;}<br /><em><br /><br />&#160;The running state needs to keep track of the time remaining</em></div>
-<div class="tip" id="fs27">union case State.DoorOpenPaused: DoorOpenPausedState -&gt; State</div>
-<div class="tip" id="fs28">type DoorOpenPausedState =<br />&#160;&#160;{TimeRemaining: TimeRemaining;}<br /><em><br /><br />&#160;The paused state also needs to keep track of the time remaining</em></div>
-<div class="tip" id="fs29">Multiple items<br />RunningState.TimeRemaining: TimeRemaining<br /><br />--------------------<br />type TimeRemaining = | TimeRemaining of int&lt;second&gt;</div>
-<div class="tip" id="fs30">Multiple items<br />DoorOpenPausedState.TimeRemaining: TimeRemaining<br /><br />--------------------<br />type TimeRemaining = | TimeRemaining of int&lt;second&gt;</div>
-<div class="tip" id="fs31">type OpenWhenIdle = OpenCommand -&gt; DoorClosedIdleState -&gt; DoorOpenIdleState</div>
-<div class="tip" id="fs32">type CloseWhenIdle = CloseCommand -&gt; DoorOpenIdleState -&gt; DoorClosedIdleState</div>
-<div class="tip" id="fs33">type OpenWhenRunning = OpenCommand -&gt; RunningState -&gt; DoorOpenPausedState</div>
-<div class="tip" id="fs34">type CloseWhenRunning = CloseCommand -&gt; DoorOpenPausedState -&gt; RunningState</div>
+<div class="tip" id="fs6">val create : t:int&lt;second&gt; -&gt; TimeRemaining option<br /><em><br /><br />&#160;Construct a TimeRemaining, or return None</em></div>
+<div class="tip" id="fs7">val t : int&lt;second&gt;</div>
+<div class="tip" id="fs8">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs9">union case Option.None: Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs10">val value : TimeRemaining -&gt; int&lt;second&gt;<br /><em><br /><br />&#160;Extract the value from inside a TimeRemaining</em></div>
+<div class="tip" id="fs11">type Command =<br />&#160;&#160;| Open of OpenCommand<br />&#160;&#160;| Close of CloseCommand<br />&#160;&#160;| Start of StartCommand<br /><em><br /><br />&#160;the complete list of commands</em></div>
+<div class="tip" id="fs12">union case Command.Open: OpenCommand -&gt; Command</div>
+<div class="tip" id="fs13">type OpenCommand =<br />&#160;&#160;{User: UserId;}</div>
+<div class="tip" id="fs14">union case Command.Close: CloseCommand -&gt; Command</div>
+<div class="tip" id="fs15">type CloseCommand =<br />&#160;&#160;{User: UserId;}</div>
+<div class="tip" id="fs16">Multiple items<br />union case Command.Start: StartCommand -&gt; Command<br /><br />--------------------<br />type Start = StartCommand -&gt; DoorClosedIdleState -&gt; RunningState</div>
+<div class="tip" id="fs17">type StartCommand =<br />&#160;&#160;{User: UserId;<br />&#160;&#160;&#160;HowLong: TimeRemaining;}</div>
+<div class="tip" id="fs18">OpenCommand.User: UserId</div>
+<div class="tip" id="fs19">type UserId = string<br /><em><br /><br />&#160;A placeholder until we know more</em></div>
+<div class="tip" id="fs20">CloseCommand.User: UserId</div>
+<div class="tip" id="fs21">StartCommand.User: UserId</div>
+<div class="tip" id="fs22">StartCommand.HowLong: TimeRemaining</div>
+<div class="tip" id="fs23">Multiple items<br />module TimeRemaining<br /><br />from Microwave.Domain<br /><br />--------------------<br />type TimeRemaining = private | TimeRemaining of int&lt;second&gt;</div>
+<div class="tip" id="fs24">type State =<br />&#160;&#160;| DoorOpenIdle of DoorOpenIdleState<br />&#160;&#160;| DoorClosedIdle of DoorClosedIdleState<br />&#160;&#160;| Running of RunningState<br />&#160;&#160;| DoorOpenPaused of DoorOpenPausedState</div>
+<div class="tip" id="fs25">union case State.DoorOpenIdle: DoorOpenIdleState -&gt; State</div>
+<div class="tip" id="fs26">type DoorOpenIdleState = | DoorOpenIdleState<br /><em><br /><br />&#160;A place holder for state associated with the door being open.</em></div>
+<div class="tip" id="fs27">union case State.DoorClosedIdle: DoorClosedIdleState -&gt; State</div>
+<div class="tip" id="fs28">type DoorClosedIdleState = | DoorClosedIdleState</div>
+<div class="tip" id="fs29">union case State.Running: RunningState -&gt; State</div>
+<div class="tip" id="fs30">type RunningState =<br />&#160;&#160;{TimeRemaining: TimeRemaining;}<br /><em><br /><br />&#160;The running state needs to keep track of the time remaining</em></div>
+<div class="tip" id="fs31">union case State.DoorOpenPaused: DoorOpenPausedState -&gt; State</div>
+<div class="tip" id="fs32">type DoorOpenPausedState =<br />&#160;&#160;{TimeRemaining: TimeRemaining;}<br /><em><br /><br />&#160;The paused state also needs to keep track of the time remaining</em></div>
+<div class="tip" id="fs33">Multiple items<br />union case DoorOpenIdleState.DoorOpenIdleState: DoorOpenIdleState<br /><br />--------------------<br />type DoorOpenIdleState = | DoorOpenIdleState<br /><em><br /><br />&#160;A place holder for state associated with the door being open.</em></div>
+<div class="tip" id="fs34">Multiple items<br />union case DoorClosedIdleState.DoorClosedIdleState: DoorClosedIdleState<br /><br />--------------------<br />type DoorClosedIdleState = | DoorClosedIdleState</div>
+<div class="tip" id="fs35">Multiple items<br />RunningState.TimeRemaining: TimeRemaining<br /><br />--------------------<br />module TimeRemaining<br /><br />from Microwave.Domain<br /><br />--------------------<br />type TimeRemaining = private | TimeRemaining of int&lt;second&gt;</div>
+<div class="tip" id="fs36">Multiple items<br />DoorOpenPausedState.TimeRemaining: TimeRemaining<br /><br />--------------------<br />module TimeRemaining<br /><br />from Microwave.Domain<br /><br />--------------------<br />type TimeRemaining = private | TimeRemaining of int&lt;second&gt;</div>
+<div class="tip" id="fs37">type OpenWhenIdle = OpenCommand -&gt; DoorClosedIdleState -&gt; DoorOpenIdleState</div>
+<div class="tip" id="fs38">type CloseWhenIdle = CloseCommand -&gt; DoorOpenIdleState -&gt; DoorClosedIdleState</div>
+<div class="tip" id="fs39">type Start = StartCommand -&gt; DoorClosedIdleState -&gt; RunningState</div>
+<div class="tip" id="fs40">type OpenWhenRunning = OpenCommand -&gt; RunningState -&gt; DoorOpenPausedState</div>
+<div class="tip" id="fs41">type CloseWhenRunning = CloseCommand -&gt; DoorOpenPausedState -&gt; RunningState</div>
+<div class="tip" id="fs42">type Error =<br />&#160;&#160;| CantUseNegativeTimeRemaining<br />&#160;&#160;| CantCloseDoorWhenDoorIsAlreadyClosed<br />&#160;&#160;| CantOpenDoorWhenDoorIsAlreadyOpen<br />&#160;&#160;| CantStart<br />&#160;&#160;| NoError</div>
+<div class="tip" id="fs43">union case Error.CantUseNegativeTimeRemaining: Error</div>
+<div class="tip" id="fs44">union case Error.CantCloseDoorWhenDoorIsAlreadyClosed: Error</div>
+<div class="tip" id="fs45">union case Error.CantOpenDoorWhenDoorIsAlreadyOpen: Error</div>
+<div class="tip" id="fs46">union case Error.CantStart: Error</div>
+<div class="tip" id="fs47">union case Error.NoError: Error</div>
 
         </div>
         <div class="span1"></div>
