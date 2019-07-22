@@ -76,38 +76,69 @@ Business rules:
 
 * The microwave cannot be running if the door is open
 * The microwave cannot be running if the TimeRemaining = 0
+* New rule: When restarted after pause, TimeRemaining must be the same as when the pause happened.
 
 *)
 
-    /// This is a *bad* design because we are not making illegal states unrepresentable.
-    /// For example, in this design:
-    ///  * the door can be open and also running
-    ///  * it can be running with no TimeRemaining
-    ///  * it can be finished running with TimeRemaining > 0
-    type BadStateDesign = {
-        IsDoorOpen : bool
-        IsRunning : bool
-        TimeRemaining : TimeRemaining option
-        }
-
-    /// This is a better design because we are keeping the states separate.
-    /// e.g TimeRemaining is only available in the Running state.
     type State =
-        | DoorOpen of DoorOpenState
-        | DoorClosed of DoorClosedState
+        | DoorOpenIdle of DoorOpenIdleState
+        | DoorClosedIdle of DoorClosedIdleState
         | Running of RunningState
+        | DoorOpenPaused of DoorOpenPausedState
 
     /// A place holder for state associated with the door being open.
-    /// We might eliminate this later if there is no information needed.
-    type DoorOpenState = DoorOpenState
-
-    type DoorClosedState = DoorClosedState
+    type DoorOpenIdleState = DoorOpenIdleState
+    type DoorClosedIdleState = DoorClosedIdleState
 
     /// The running state needs to keep track of the time remaining
     type RunningState = {
         TimeRemaining : TimeRemaining
         }
 
+    /// The paused state also needs to keep track of the time remaining
+    type DoorOpenPausedState = {
+        TimeRemaining : TimeRemaining
+        }
+
+(**
+## State transitions
+
+Here, we document how to go from one state of the microwave to another.
+E.g. opening a door, starting it, etc.
+*)
+
+
+    // Our first pass at documenting the state transitions is not very informative -- they all look the same!
+
+(*
+    type OpenWhenIdle =
+        OpenCommand -> State -> State
+
+    type CloseWhenIdle =
+        CloseCommand -> State -> State
+
+    type Start =
+        StartCommand -> State -> State
+*)
+
+
+    // By using the type associated with each state instead, rather than the state as a whole,
+    // the actions become much clearer.
+
+    type OpenWhenIdle =
+        OpenCommand -> DoorClosedIdleState -> DoorOpenIdleState
+
+    type CloseWhenIdle =
+        CloseCommand -> DoorOpenIdleState -> DoorClosedIdleState
+
+    type Start =
+        StartCommand -> DoorClosedIdleState -> RunningState
+
+    type OpenWhenRunning =
+        OpenCommand -> RunningState -> DoorOpenPausedState
+
+    type CloseWhenRunning =
+        CloseCommand -> DoorOpenPausedState -> RunningState
 
 
 
