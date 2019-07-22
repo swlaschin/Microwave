@@ -444,7 +444,6 @@
 <ul>
 <li>The microwave cannot be running if the door is open</li>
 <li>The microwave cannot be running if the TimeRemaining = 0</li>
-<li>New rule: When restarted after pause, TimeRemaining must be the same as when the pause happened.</li>
 </ul>
 <pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs20', 30)" onmouseover="showTip(event, 'fs20', 30)" class="rt">State</span> <span class="o">=</span>
         <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs21', 31)" onmouseover="showTip(event, 'fs21', 31)" class="uc">DoorOpenIdle</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs22', 32)" onmouseover="showTip(event, 'fs22', 32)" class="rt">DoorOpenIdleState</span>
@@ -469,24 +468,7 @@
 <h2>State transitions</h2>
 <p>Here, we document how to go from one state of the microwave to another.
 E.g. opening a door, starting it, etc.</p>
-<pre class="fssnip highlighted"><code lang="fsharp">    <span class="c">// Our first pass at documenting the state transitions is not very informative -- they all look the same!</span>
-
-<span class="c">(*</span>
-<span class="c">    type OpenWhenIdle =</span>
-<span class="c">        OpenCommand -&gt; State -&gt; State</span>
-
-<span class="c">    type CloseWhenIdle =</span>
-<span class="c">        CloseCommand -&gt; State -&gt; State</span>
-
-<span class="c">    type Start =</span>
-<span class="c">        StartCommand -&gt; State -&gt; State</span>
-<span class="c">*)</span>
-
-
-    <span class="c">// By using the type associated with each state instead, rather than the state as a whole,</span>
-    <span class="c">// the actions become much clearer.</span>
-
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs31', 49)" onmouseover="showTip(event, 'fs31', 49)" class="rt">OpenWhenIdle</span> <span class="o">=</span>
+<pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs31', 49)" onmouseover="showTip(event, 'fs31', 49)" class="rt">OpenWhenIdle</span> <span class="o">=</span>
         <span onmouseout="hideTip(event, 'fs11', 50)" onmouseover="showTip(event, 'fs11', 50)" class="rt">OpenCommand</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs24', 51)" onmouseover="showTip(event, 'fs24', 51)" class="rt">DoorClosedIdleState</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs22', 52)" onmouseover="showTip(event, 'fs22', 52)" class="rt">DoorOpenIdleState</span>
 
     <span class="k">type</span> <span onmouseout="hideTip(event, 'fs32', 53)" onmouseover="showTip(event, 'fs32', 53)" class="rt">CloseWhenIdle</span> <span class="o">=</span>

@@ -76,7 +76,6 @@ Business rules:
 
 * The microwave cannot be running if the door is open
 * The microwave cannot be running if the TimeRemaining = 0
-* New rule: When restarted after pause, TimeRemaining must be the same as when the pause happened.
 
 *)
 
@@ -106,24 +105,6 @@ Business rules:
 Here, we document how to go from one state of the microwave to another.
 E.g. opening a door, starting it, etc.
 *)
-
-
-    // Our first pass at documenting the state transitions is not very informative -- they all look the same!
-
-(*
-    type OpenWhenIdle =
-        OpenCommand -> State -> State
-
-    type CloseWhenIdle =
-        CloseCommand -> State -> State
-
-    type Start =
-        StartCommand -> State -> State
-*)
-
-
-    // By using the type associated with each state instead, rather than the state as a whole,
-    // the actions become much clearer.
 
     type OpenWhenIdle =
         OpenCommand -> DoorClosedIdleState -> DoorOpenIdleState
