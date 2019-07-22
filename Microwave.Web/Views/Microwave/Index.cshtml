@@ -1,0 +1,25 @@
+﻿<h1>Microwave</h1>
+
+<form asp-controller="Microwave" asp-action="Start" method="post">
+    <input type="number" name="HowLong" >
+    <button>Start</button>
+</form>
+
+<form asp-controller="Microwave" asp-action="Open" method="post">
+    <button>Open</button>
+</form>
+<form asp-controller="Microwave" asp-action="Close" method="post">
+    <button>Close</button>
+</form>
+<form asp-controller="Microwave" asp-action="Index" method="get">
+    <button>Get State</button>
+</form>
+
+<p style="background-color:aquamarine">
+    Status = @ViewData["State"]
+</p>
+
+<p style="background-color:lightsalmon;">
+    @ViewData["ErrorMessage"]
+</p>
+

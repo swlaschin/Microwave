@@ -396,3 +396,7 @@ paket-files/
 *.sln.iml
 /Slides
 /*.pdf
+
+/*.pptx
+
+/LN Offsite notes.txt
